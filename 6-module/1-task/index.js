@@ -13,6 +13,39 @@
  *
  */
 export default class UserTable {
-  constructor(rows) {
+  #headNames = ''
+  #data = []
+  #elem = ''
+  constructor(rows, headNames = ['Name', 'Age', 'Salary', 'City', '']) {
+    this.#headNames = headNames;
+    this.#data = rows;
+    this.#elem = document.createElement('table');
+    this.#elem.addEventListener('click', this.deleteRow);
+    this.elem = this.#elem;
+    this.render();
+  }
+
+  deleteRow() {
+    if (event.target.tagName === 'BUTTON') {
+      event.target.parentElement.parentElement.remove();
+    }
+  }
+
+  createRow(row) {
+    return `<tr>
+    ${Object.values(row).map(cell => `<td>${cell}</td>`).join('')}
+    <td><button>X</button></td>
+    </tr>`;
+  }
+
+  render() {
+    const template = `
+    <thead>
+      <tr>${Object.values(this.#headNames).map(cell => `<th>${cell}</th>`).join('')}</tr>
+    </thead>
+    <tbody>
+      ${this.#data.map(item => this.createRow(item)).join('')}
+    </tbody>`;
+    this.#elem.insertAdjacentHTML('afterbegin', template);
   }
 }
